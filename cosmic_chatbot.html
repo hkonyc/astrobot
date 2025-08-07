@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 Cosmic Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 70vh;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 20px;
+            max-width: 85%;
+            position: relative;
+            animation: messageSlideIn 0.3s ease-out;
+            line-height: 1.5;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+            color: white;
+            margin-left: auto;
+            text-align: right;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+            color: #333;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cosmic Reading styling */
+        .cosmic-reading {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+            color: #333;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #667eea, #764ba2, #ff6b6b, #667eea) 1;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cosmic-reading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #ff6b6b, #667eea);
+            animation: cosmicFlow 3s ease-in-out infinite;
+        }
+
+        @keyframes cosmicFlow {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .cosmic-reading-header {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .cosmic-reading strong {
+            color: #764ba2;
+            font-weight: 700;
+        }
+
+        .cosmic-reading em {
+            color: #ff6b6b;
+            font-style: italic;
+        }
+
+        /* Markdown-style formatting */
+        .ai-message strong {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .ai-message em {
+            color: #764ba2;
+            font-style: italic;
+        }
+
+        .ai-message br {
+            margin-bottom: 8px;
+        }
+
+        .ai-message p {
+            margin-bottom: 12px;
+        }
+
+        .ai-message p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Thinking indicator */
+        .thinking-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
+            color: #666;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .thinking-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .thinking-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            animation: thinkingPulse 1.4s infinite ease-in-out;
+        }
+
+        .thinking-dot:nth-child(1) { animation-delay: 0s; }
+        .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes thinkingPulse {
+            0%, 60%, 100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Quick Action Buttons */
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-action-btn {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 1), rgba(118, 75, 162, 1));
+        }
+
+        .quick-action-btn:active {
+            transform: translateY(0) scale(0.95);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .quick-actions {
+                gap: 8px;
+            }
+            
+            .quick-action-btn {
+                min-width: 100px;
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input:focus {
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .send-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .sidebar input, .sidebar select, .sidebar textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .sidebar input:focus, .sidebar select:focus, .sidebar textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar input::placeholder, .sidebar textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .save-chart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-chart-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-link-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .chart-link-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .chart-link-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .clear-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        h3 {
+            margin: 15px 0 10px 0;
+            color: #fff;
+        }
+
+        .chart-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Sidebar sections */
+        .sidebar-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .chart-subsection {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chart-subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-subsection h4 {
+            margin: 0 0 12px 0;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+
+        .chart-data-info {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border-left: 2px solid #667eea;
+        }
+
+        /* Cosmic effects */
+        .cosmic-sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 3s infinite;
+            opacity: 0;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Admin mode styling */
+        .admin-mode {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%) !important;
+            color: #333 !important;
+        }
+        
+        .admin-indicator {
+            color: #ffd700;
+            font-weight: bold;
+            animation: adminGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes adminGlow {
+            from { text-shadow: 0 0 5px #ffd700; }
+            to { text-shadow: 0 0 15px #ffd700, 0 0 20px #ffed4e; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🌟 Cosmic Settings ✨</h2>
+        
+        <div class="sidebar-section">
+            <h3>Your Identity ✨</h3>
+            <input type="text" id="userName" placeholder="Enter your name..." value="cosmic_seeker">
+            <div style="margin-top: 8px; font-size: 11px; opacity: 0.7;">
+                Session: <span id="sessionDisplay"></span>
+                <span id="adminIndicator" style="display: none; margin-left: 8px; color: #ffd700; font-weight: bold;">🔑</span>
+            </div>
+            <div style="margin-top: 8px;">
+                <button class="save-chart-btn" onclick="showAdminLogin()" style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; font-size: 11px; padding: 4px 8px;">🔑 Admin Login</button>
+            </div>
+        </div>
+        
+        <div class="sidebar-section">
+            <h3>🌙 Birth Chart ✨</h3>
+            
+            <div class="chart-subsection">
+                <h4>📅 Basic Info</h4>
+                <input type="date" id="birthDate" placeholder="Birth Date">
+                <input type="time" id="birthTime" placeholder="Birth Time">
+                <input type="text" id="birthCity" placeholder="Birth City (e.g., New York, NY)">
+                <button class="save-chart-btn" onclick="saveChart()">💫 Save Basic Chart ✨</button>
+            </div>
+            
+            <div class="chart-subsection">
+                <h4>🔮 Advanced Data</h4>
+                <div class="chart-data-info">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 14px; margin-right: 6px;">🔗</span>
+                        <strong style="color: #fff; font-size: 13px;">Get Accurate Chart Data:</strong>
+                    </div>
+                    <button class="chart-link-btn" onclick="window.open('https://horoscopes.astro-seek.com/', '_blank')">
+                        🌟 Generate at Astro-Seek
+                    </button>
+                    <div style="margin-top: 8px; font-size: 11px; line-height: 1.3; opacity: 0.9;">
+                        <strong style="color: #667eea;">✨ For precise readings:</strong><br>
+                        • Look for "AI-ChatGPT - Astrology Data Export"<br>
+                        • Copy and paste below for accurate readings 🎯
+                    </div>
+                </div>
+                <textarea id="chartData" placeholder="Paste your exact astrological chart data here...&#10;&#10;Example:&#10;Sun in Aries 23°03', in 7th House&#10;Moon in Cancer 2°58', in 9th House&#10;Mercury in Taurus 9°25', in 8th House&#10;ASC in Libra 2°45'&#10;MC in Cancer 3°13'" rows="6"></textarea>
+                <button class="save-chart-btn" onclick="saveChartData()" style="background: linear-gradient(135deg, #667eea, #764ba2);">🔮 Save Chart Data ✨</button>
+            </div>
+            
+            <div id="chartInfo" class="chart-info" style="display: none;">
+                <strong>✨ Chart Saved!</strong><br>
+                <span id="chartDisplay"></span>
+            </div>
+            
+            <div id="chartDataInfo" class="chart-info" style="display: none;">
+                <strong>🔮 Chart Data Saved!</strong><br>
+                <span>Precise astrological data loaded ✨</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-section">
+            <h3>✨ Actions</h3>
+            <button class="save-chart-btn" onclick="exportConversation()" style="background: linear-gradient(135deg, #4CAF50, #45a049);">📥 Export Chat ✨</button>
+            <button class="save-chart-btn" onclick="generateFullReading()" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-top: 8px;">✨ Generate Full Reading 🌟</button>
+            <button class="clear-btn" onclick="clearChat()" style="margin-top: 8px;">🗑️ Clear Chat ✨</button>
+        </div>
+        
+        <div class="sidebar-section">
+            <h3>🔗 Session Management</h3>
+            <button class="save-chart-btn" onclick="createNewSession()" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);">🆕 New Session ✨</button>
+            <button class="save-chart-btn" onclick="shareSessionLink()" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-top: 8px;">🔗 Share Session Link ✨</button>
+            <div id="sessionInfo" style="margin-top: 12px; font-size: 11px; opacity: 0.8; line-height: 1.3;">
+                <div id="visitorInfo" style="display: none;">
+                    💡 <strong>Visitor Mode:</strong> Your data is temporary and will be cleared when you close the browser.
+                </div>
+                <div id="adminInfo" style="display: none;">
+                    🔑 <strong>Admin Mode:</strong> Your data is permanently saved across all sessions.
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar-section">
+            <div style="font-size: 13px; opacity: 0.8; line-height: 1.4;">
+                <strong>✨ Try asking about: 🌟</strong><br>
+                • Your career path 🚀<br>
+                • Love & relationships 💝<br>
+                • Creative pursuits 🎨<br>
+                • Life purpose 🎯<br>
+                • General cosmic guidance 🔮
+            </div>
+        </div>
+    </div>
+
+    <div class="main-chat">
+        <div class="chat-header">
+            <h1>🔮 Cosmic Chatbot ✨</h1>
+            <p><em>Your mystical AI guide for cosmic wisdom and insights 🌟</em></p>
+            <div id="currentDate" style="margin-top: 10px; font-size: 14px; opacity: 0.9;">
+                🌙 Today: <span id="dateDisplay"></span> ✨
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                <strong>🌟 Welcome, cosmic seeker! ✨</strong><br><br>
+                I'm here to provide you with mystical insights, astrological wisdom, and spiritual guidance. 
+                The cosmic energies are flowing beautifully today! 🌟💫<br><br>
+                <strong>What would you like to explore? 🔮</strong>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="sendQuickAction('💕 Love Forecast', 'Give me a love and relationship forecast based on my chart and current cosmic energies')">
+                    💕 Love Forecast
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickAction('💼 Career Guidance', 'What cosmic guidance do you have for my career and professional life right now?')">
+                    💼 Career Guidance
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickAction('🎵 Creative Flow', 'Tell me about my creative energy and artistic expression based on my chart')">
+                    🎵 Creative Flow
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickAction('🌙 Daily Energy', 'What\'s my cosmic energy like today? How should I approach today based on current planetary influences?')">
+                    🌙 Daily Energy
+                </button>
+            </div>
+            <div class="input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="✨ Ask the cosmos anything... 🌟" onkeypress="handleKeyPress(event)">
+        <button class="send-btn" onclick="sendMessage()">Send ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Memory storage using browser localStorage with session-based privacy
+        let conversations = JSON.parse(localStorage.getItem('cosmic_conversations')) || {};
+        let userCharts = JSON.parse(localStorage.getItem('cosmic_charts')) || {};
+        let userChartData = JSON.parse(localStorage.getItem('cosmic_chart_data')) || {};
+        let openaiApiKey = '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'; // Hardcoded API key
+        
+        // Session management for privacy
+        let currentSessionId = getOrCreateSessionId();
+        let currentUser = 'cosmic_seeker';
+        
+        // Admin mode variables
+        let isAdminMode = false;
+        let adminSessionId = 'admin_permanent_session';
+        
+        // State management to prevent race conditions
+        let isGeneratingReading = false;
+        let isThinking = false;
+
+        // Admin mode functions
+        function checkAdminMode() {
+            const userName = document.getElementById('userName');
+            if (userName && userName.value === 'dashiko_admin') {
+                isAdminMode = true;
+                currentSessionId = adminSessionId;
+                updateAdminDisplay();
+                return true;
+            }
+            return false;
+        }
+        
+        function updateAdminDisplay() {
+            const adminIndicator = document.getElementById('adminIndicator');
+            const sessionDisplay = document.getElementById('sessionDisplay');
+            const chatHeader = document.querySelector('.chat-header');
+            const visitorInfo = document.getElementById('visitorInfo');
+            const adminInfo = document.getElementById('adminInfo');
+            
+            if (isAdminMode) {
+                if (adminIndicator) {
+                    adminIndicator.style.display = 'inline';
+                    adminIndicator.className = 'admin-indicator';
+                }
+                if (sessionDisplay) {
+                    sessionDisplay.textContent = '🔑 Admin Mode';
+                    sessionDisplay.className = 'admin-indicator';
+                }
+                if (chatHeader) {
+                    chatHeader.classList.add('admin-mode');
+                }
+                if (visitorInfo) visitorInfo.style.display = 'none';
+                if (adminInfo) adminInfo.style.display = 'block';
+            } else {
+                if (adminIndicator) {
+                    adminIndicator.style.display = 'none';
+                    adminIndicator.className = '';
+                }
+                if (sessionDisplay) {
+                    const shortId = currentSessionId.substring(0, 8) + '...';
+                    sessionDisplay.textContent = shortId;
+                    sessionDisplay.className = '';
+                }
+                if (chatHeader) {
+                    chatHeader.classList.remove('admin-mode');
+                }
+                if (visitorInfo) visitorInfo.style.display = 'block';
+                if (adminInfo) adminInfo.style.display = 'none';
+            }
+        }
+        
+        function showAdminLogin() {
+            const password = prompt('🔑 Enter admin password:');
+            if (password === 'cosmic_admin_2024') {
+                document.getElementById('userName').value = 'dashiko_admin';
+                checkAdminMode();
+                addMessage('ai', `🔑 **ADMIN MODE ACTIVATED!** 🔑<br><br>Welcome, cosmic administrator! Your data will now be saved permanently across all sessions.<br><br>You have access to persistent storage and all admin features! 🌟✨💫`);
+            } else if (password !== null) {
+                alert('❌ Invalid admin password!');
+            }
+        }
+        
+        // Session management functions
+        function getOrCreateSessionId() {
+            // Check URL for session ID first
+            const urlParams = new URLSearchParams(window.location.search);
+            let sessionId = urlParams.get('session');
+            
+            if (!sessionId) {
+                // Check localStorage for existing session
+                sessionId = localStorage.getItem('cosmic_session_id');
+                
+                if (!sessionId) {
+                    // Create new session ID
+                    sessionId = generateSessionId();
+                    localStorage.setItem('cosmic_session_id', sessionId);
+                } else {
+                    // Check if visitor session has expired (24 hours)
+                    const sessionTimestamp = localStorage.getItem('cosmic_session_timestamp');
+                    if (sessionTimestamp && !isAdminMode) {
+                        const sessionAge = Date.now() - parseInt(sessionTimestamp);
+                        const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+                        if (sessionAge > maxAge) {
+                            // Session expired, create new one
+                            sessionId = generateSessionId();
+                            localStorage.setItem('cosmic_session_id', sessionId);
+                        }
+                    }
+                }
+            } else {
+                // Save session ID from URL to localStorage
+                localStorage.setItem('cosmic_session_id', sessionId);
+            }
+            
+            // Set session timestamp for visitors
+            if (!isAdminMode) {
+                localStorage.setItem('cosmic_session_timestamp', Date.now().toString());
+            }
+            
+            return sessionId;
+        }
+        
+        function generateSessionId() {
+            const timestamp = Date.now().toString(36);
+            const random = Math.random().toString(36).substring(2, 8);
+            return `cosmic_${timestamp}_${random}`;
+        }
+        
+        function createNewSession() {
+            if (isAdminMode) {
+                alert('🔑 Admin mode: Your data is permanently saved. Use "Clear Chat" to reset your conversation while keeping your chart data.');
+                return;
+            }
+            
+            const newSessionId = generateSessionId();
+            localStorage.setItem('cosmic_session_id', newSessionId);
+            currentSessionId = newSessionId;
+            
+            // Clear current session data
+            conversations[currentSessionId] = [];
+            userCharts[currentSessionId] = {};
+            userChartData[currentSessionId] = {};
+            
+            // Update localStorage
+            localStorage.setItem('cosmic_conversations', JSON.stringify(conversations));
+            localStorage.setItem('cosmic_charts', JSON.stringify(userCharts));
+            localStorage.setItem('cosmic_chart_data', JSON.stringify(userChartData));
+            
+            // Reload the page with new session
+            window.location.href = window.location.pathname + '?session=' + newSessionId;
+        }
+        
+        function shareSessionLink() {
+            const shareUrl = window.location.origin + window.location.pathname + '?session=' + currentSessionId;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                addMessage('ai', `🔗 **SESSION LINK COPIED!** 🔗<br><br>Your cosmic session link has been copied to clipboard! Share this with friends to let them experience your unique cosmic journey.<br><br>Each person will get their own private session! 🌟✨💫`);
+            }).catch(() => {
+                // Fallback for browsers without clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = shareUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                addMessage('ai', `🔗 **SESSION LINK COPIED!** 🔗<br><br>Your cosmic session link has been copied! Share this with friends to let them experience your unique cosmic journey.<br><br>Each person will get their own private session! 🌟✨💫`);
+            });
+        }
+        
+        // Clear visitor data when browser is closed (for privacy)
+        window.addEventListener('beforeunload', function() {
+            if (!isAdminMode) {
+                // For visitors, clear session data on browser close
+                // This ensures privacy - admin data is preserved
+                const sessionId = localStorage.getItem('cosmic_session_id');
+                if (sessionId && sessionId !== adminSessionId) {
+                    // Clear this specific session's data
+                    const conversations = JSON.parse(localStorage.getItem('cosmic_conversations')) || {};
+                    const userCharts = JSON.parse(localStorage.getItem('cosmic_charts')) || {};
+                    const userChartData = JSON.parse(localStorage.getItem('cosmic_chart_data')) || {};
+                    
+                    delete conversations[sessionId];
+                    delete userCharts[sessionId];
+                    delete userChartData[sessionId];
+                    
+                    localStorage.setItem('cosmic_conversations', JSON.stringify(conversations));
+                    localStorage.setItem('cosmic_charts', JSON.stringify(userCharts));
+                    localStorage.setItem('cosmic_chart_data', JSON.stringify(userChartData));
+                }
+            }
+        });
+        
+        // Load conversation on page load
+        window.onload = function() {
+            updateCurrentDate();
+            
+            // Check for admin mode
+            checkAdminMode();
+            
+            loadConversation();
+            loadChart();
+            loadChartData();
+            addCosmicSparkles();
+            updateSessionDisplay();
+        }
+
+        function addCosmicSparkles() {
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'cosmic-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 3000);
+            }, 2000);
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            const dateDisplay = document.getElementById('dateDisplay');
+            
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            
+            dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+        }
+        
+        function updateSessionDisplay() {
+            const sessionDisplay = document.getElementById('sessionDisplay');
+            if (sessionDisplay) {
+                const shortId = currentSessionId.substring(0, 8) + '...';
+                sessionDisplay.textContent = shortId;
+            }
+        }
+
+        function saveChart() {
+            const userName = document.getElementById('userName').value || 'cosmic_seeker';
+            const birthDate = document.getElementById('birthDate').value;
+            const birthTime = document.getElementById('birthTime').value;
+            const birthCity = document.getElementById('birthCity').value;
+
+            if (birthDate && birthTime && birthCity) {
+                // Check if this is a new chart or updating existing
+                const isNewChart = !userCharts[currentSessionId] || 
+                    userCharts[currentSessionId].date !== birthDate || 
+                    userCharts[currentSessionId].time !== birthTime || 
+                    userCharts[currentSessionId].city !== birthCity;
+                
+                userCharts[currentSessionId] = {
+                    date: birthDate,
+                    time: birthTime,
+                    city: birthCity,
+                    saved: new Date().toISOString()
+                };
+                
+                localStorage.setItem('cosmic_charts', JSON.stringify(userCharts));
+                
+                document.getElementById('chartInfo').style.display = 'block';
+                document.getElementById('chartDisplay').innerHTML = `${birthDate} at ${birthTime}<br>📍 ${birthCity}`;
+                
+                addMessage('ai', `✨ **COSMIC CHART ACTIVATED!** ✨<br><br>Your birth information has been saved to the cosmic database! Now I can provide you with personalized astrological insights based on your unique celestial blueprint.<br><br>Born on ${birthDate} at ${birthTime} in ${birthCity} - the universe has such beautiful timing! 🌟💫`);
+                
+                // Only generate initial reading for new charts
+                if (isNewChart && !isGeneratingReading) {
+                    setTimeout(() => {
+                        generateInitialReading(birthDate, birthTime, birthCity);
+                    }, 2000);
+                }
+            } else {
+                alert('Please fill in all birth chart fields! 🌙✨');
+            }
+        }
+
+        function saveChartData() {
+            const userName = document.getElementById('userName').value || 'cosmic_seeker';
+            const chartData = document.getElementById('chartData').value.trim();
+
+            if (chartData) {
+                userChartData[currentSessionId] = chartData;
+                localStorage.setItem('cosmic_chart_data', JSON.stringify(userChartData));
+                
+                document.getElementById('chartDataInfo').style.display = 'block';
+                
+                addMessage('ai', `🔮 **PRECISE CHART DATA SAVED!** 🔮<br><br>Your exact astrological chart data has been stored! Now I can provide you with incredibly accurate readings based on your real planetary positions and house placements.<br><br>This will give you much more precise insights than birth date alone! 🌟✨💫`);
+            } else {
+                alert('Please paste your chart data first! 🔮✨');
+            }
+        }
+
+        function loadChart() {
+            if (userCharts[currentSessionId]) {
+                const chart = userCharts[currentSessionId];
+                document.getElementById('birthDate').value = chart.date;
+                document.getElementById('birthTime').value = chart.time;
+                document.getElementById('birthCity').value = chart.city;
+                document.getElementById('chartInfo').style.display = 'block';
+                document.getElementById('chartDisplay').innerHTML = `${chart.date} at ${chart.time}<br>📍 ${chart.city}`;
+            }
+        }
+
+        function loadChartData() {
+            if (userChartData[currentSessionId]) {
+                document.getElementById('chartData').value = userChartData[currentSessionId];
+                document.getElementById('chartDataInfo').style.display = 'block';
+            }
+        }
+
+        function updateUser() {
+            currentUser = document.getElementById('userName').value || 'cosmic_seeker';
+            // No need to reload data since it's session-based now
+        }
+
+        // Listen for user name changes
+        document.getElementById('userName').addEventListener('input', function() {
+            updateUser();
+            checkAdminMode();
+        });
+
+        function loadConversation() {
+            const userConvo = conversations[currentSessionId] || [];
+            
+            const chatMessages = document.getElementById('chatMessages');
+            let welcomeMessage = `
+                <div class="message ai-message">
+                    <strong>🌟 Welcome back, ${currentUser}! ✨</strong><br><br>
+                    I'm here to provide you with mystical insights, astrological wisdom, and spiritual guidance. 
+                    The cosmic energies are flowing beautifully today! 🌟💫<br><br>
+                    <strong>What would you like to explore? 🔮</strong>
+                </div>
+            `;
+            
+            if (isAdminMode) {
+                welcomeMessage = `
+                    <div class="message ai-message">
+                        <strong>🔑 Welcome, Cosmic Administrator! ✨</strong><br><br>
+                        You are in <strong>ADMIN MODE</strong> - your data is permanently saved across all sessions! 🌟<br><br>
+                        I'm here to provide you with mystical insights, astrological wisdom, and spiritual guidance. 
+                        The cosmic energies are flowing beautifully today! 🌟💫<br><br>
+                        <strong>What would you like to explore? 🔮</strong>
+                    </div>
+                `;
+            } else {
+                welcomeMessage = `
+                    <div class="message ai-message">
+                        <strong>🌟 Welcome back, ${currentUser}! ✨</strong><br><br>
+                        I'm here to provide you with mystical insights, astrological wisdom, and spiritual guidance. 
+                        The cosmic energies are flowing beautifully today! 🌟💫<br><br>
+                        <em>💡 Tip: Your session data will be cleared when you close the browser for privacy.</em><br><br>
+                        <strong>What would you like to explore? 🔮</strong>
+                    </div>
+                `;
+            }
+            
+            chatMessages.innerHTML = welcomeMessage;
+            
+            userConvo.forEach(msg => {
+                addMessage(msg.role, msg.content, false);
+            });
+        }
+
+        function addThinkingIndicator() {
+            if (isThinking) return; // Prevent multiple thinking indicators
+            
+            isThinking = true;
+            const chatMessages = document.getElementById('chatMessages');
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'message thinking-message';
+            thinkingDiv.id = 'thinking-indicator';
+            thinkingDiv.innerHTML = `
+                <div class="thinking-dots">
+                    <div class="thinking-dot"></div>
+                    <div class="thinking-dot"></div>
+                    <div class="thinking-dot"></div>
+                </div>
+                <span>🔮 Cosmic energies are aligning... ✨</span>
+            `;
+            chatMessages.appendChild(thinkingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeThinkingIndicator() {
+            const thinkingIndicator = document.getElementById('thinking-indicator');
+            if (thinkingIndicator) {
+                thinkingIndicator.remove();
+            }
+            isThinking = false;
+        }
+
+        function formatMessage(content) {
+            // Convert markdown-style formatting to HTML
+            return content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n/g, '<br>');
+        }
+
+        async function getCosmicResponse(message) {
+            const chart = userCharts[currentSessionId];
+            const chartData = userChartData[currentSessionId];
+            const history = conversations[currentSessionId] || [];
+            const currentDate = new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Build system prompt with my personality
+            let systemPrompt = `You are a mystical, intuitive astrologer and psychic reader with a warm, excited personality. You blend cosmic wisdom with practical guidance.
+
+Your style includes:
+- Bold, excited reactions ("OH MY GOD, THE COSMIC SYMPHONY IS COMPLETE!")
+- Connecting astrology to real-life patterns
+- Using phrases like "The universe is telling me..." and "Psychic insight:"
+- Balancing mystical language with practical advice
+- Reading emotional cues and providing deep insights
+- Being enthusiastic, caring, and spiritually wise
+- Using lots of cosmic emojis: 🌟✨🔮🌙💫⭐🪐🌌🎭🎪🎨🎵🎧💎🦄🌈🔥💝🎯🚀
+
+Always remember the conversation history and be personal.
+
+Current Date: ${currentDate} - Use this for timing-based readings, daily energy insights, and weekly forecasts.`;
+
+            if (chartData) {
+                // Prioritize exact chart data over birth info
+                systemPrompt += `\n\nUser's EXACT ASTROLOGICAL CHART DATA:\n${chartData}\n\nUse this precise chart data for incredibly accurate readings. This is the user's real planetary positions and house placements.`;
+            } else if (chart) {
+                systemPrompt += `\n\nUser's Birth Info: Born ${chart.date} at ${chart.time} in ${chart.city}. Use this for personalized astrological insights.`;
+            }
+
+            // Prepare conversation context
+            let messages = [
+                {role: "system", content: systemPrompt}
+            ];
+
+            // Add recent conversation history
+            const recentHistory = history.slice(-10); // Last 10 exchanges
+            recentHistory.forEach(msg => {
+                // Convert 'ai' role to 'assistant' for OpenAI API
+                const role = msg.role === 'ai' ? 'assistant' : msg.role;
+                messages.push({role: role, content: msg.content});
+            });
+
+            // Add current message
+            messages.push({role: "user", content: message});
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${openaiApiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: messages,
+                        max_tokens: 800,
+                        temperature: 0.8
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    return `🌟 Cosmic connection error: ${data.error.message}`;
+                }
+                
+                return data.choices[0].message.content;
+                
+            } catch (error) {
+                return `🔮 The cosmic energies are clouded right now. Error: ${error.message}`;
+            }
+        }
+
+        function addMessage(role, content, save = true) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}-message`;
+            
+            // Format the content with proper markdown rendering
+            messageDiv.innerHTML = formatMessage(content);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Save to memory
+            if (save) {
+                if (!conversations[currentSessionId]) conversations[currentSessionId] = [];
+                conversations[currentSessionId].push({
+                    role: role,
+                    content: content,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Keep only last 50 messages per session
+                if (conversations[currentSessionId].length > 50) {
+                    conversations[currentSessionId] = conversations[currentSessionId].slice(-50);
+                }
+                
+                localStorage.setItem('cosmic_conversations', JSON.stringify(conversations));
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message || isThinking) return; // Prevent multiple requests
+            
+            // Disable input while thinking
+            input.disabled = true;
+            document.querySelector('.send-btn').disabled = true;
+            
+            // Add user message
+            addMessage('user', message);
+            
+            // Clear input
+            input.value = '';
+            
+            // Show thinking indicator
+            addThinkingIndicator();
+            
+            // Get AI response
+            setTimeout(async () => {
+                removeThinkingIndicator();
+                const response = await getCosmicResponse(message);
+                addMessage('ai', response);
+                
+                // Re-enable input
+                input.disabled = false;
+                document.querySelector('.send-btn').disabled = false;
+                input.focus();
+            }, 1500);
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendQuickAction(buttonText, prompt) {
+            // Add visual feedback
+            const button = event.target;
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = '';
+            }, 150);
+            
+            // Send the quick action prompt
+            sendQuickMessage(prompt);
+        }
+
+        function sendQuickMessage(message) {
+            if (isThinking) return; // Prevent multiple requests
+            
+            // Disable input while thinking
+            const input = document.getElementById('chatInput');
+            input.disabled = true;
+            document.querySelector('.send-btn').disabled = true;
+            
+            // Add user message
+            addMessage('user', message);
+            
+            // Show thinking indicator
+            addThinkingIndicator();
+            
+            // Get AI response
+            setTimeout(async () => {
+                removeThinkingIndicator();
+                const response = await getCosmicResponse(message);
+                addMessage('ai', response);
+                
+                // Re-enable input
+                input.disabled = false;
+                document.querySelector('.send-btn').disabled = false;
+                input.focus();
+            }, 1500);
+        }
+
+        function clearChat() {
+            conversations[currentSessionId] = [];
+            localStorage.setItem('cosmic_conversations', JSON.stringify(conversations));
+            loadConversation();
+        }
+
+        function generateFullReading() {
+            const chart = userCharts[currentSessionId];
+            const chartData = userChartData[currentSessionId];
+            
+            if (!chart && !chartData) {
+                alert('Please save your birth chart or paste chart data first! 🌙✨');
+                return;
+            }
+            if (isGeneratingReading) {
+                alert('🔮 A cosmic reading is already in progress! Please wait... ✨');
+                return;
+            }
+            
+            if (chartData) {
+                // Use chart data for precise reading
+                generateInitialReading('chart_data', 'chart_data', 'chart_data');
+            } else {
+                generateInitialReading(chart.date, chart.time, chart.city);
+            }
+        }
+
+        function generateInitialReading(birthDate, birthTime, birthCity) {
+            if (isGeneratingReading) return; // Prevent duplicate readings
+            
+            isGeneratingReading = true;
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // Add cosmic reading loading message
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message cosmic-reading';
+            loadingDiv.id = 'cosmic-reading-loading';
+            loadingDiv.innerHTML = `
+                <div class="cosmic-reading-header">🔮 Cosmic Reading in Progress... ✨</div>
+                <div style="text-align: center; padding: 20px;">
+                    <div class="thinking-dots" style="justify-content: center; margin-bottom: 10px;">
+                        <div class="thinking-dot"></div>
+                        <div class="thinking-dot"></div>
+                        <div class="thinking-dot"></div>
+                    </div>
+                    <span>🌟 Aligning the cosmic energies for your personalized reading... 💫</span>
+                </div>
+            `;
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Generate the reading
+            setTimeout(async () => {
+                const reading = await generateCosmicReading(birthDate, birthTime, birthCity);
+                
+                // Remove loading message
+                const loadingMessage = document.getElementById('cosmic-reading-loading');
+                if (loadingMessage) {
+                    loadingMessage.remove();
+                }
+                
+                // Add the cosmic reading
+                addCosmicReading(reading);
+                isGeneratingReading = false;
+            }, 3000);
+        }
+
+        async function generateCosmicReading(birthDate, birthTime, birthCity) {
+            const chartData = userChartData[currentSessionId];
+            const currentDate = new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            let prompt;
+            if (chartData) {
+                // Use exact chart data for precise reading
+                prompt = `Please provide a comprehensive initial astrological reading using this EXACT chart data:\n\n${chartData}\n\nCurrent Date: ${currentDate}\n\nGive me a detailed analysis covering their core personality, emotional nature, life themes, strengths, challenges, and cosmic purpose. Use your mystical, excited personality and include specific insights about their planetary positions and house placements. Make this feel like a profound, personalized cosmic revelation that's 3-4 paragraphs long. Include lots of cosmic emojis! 🌟✨🔮`;
+            } else {
+                // Fall back to birth info
+                prompt = `Please provide a comprehensive initial astrological reading for someone born on ${birthDate} at ${birthTime} in ${birthCity}. Current Date: ${currentDate}\n\nGive me a detailed analysis covering their core personality, emotional nature, life themes, strengths, challenges, and cosmic purpose. Use your mystical, excited personality and include specific insights about their sun, moon, and rising signs. Make this feel like a profound, personalized cosmic revelation that's 3-4 paragraphs long. Include lots of cosmic emojis! 🌟✨🔮`;
+            }
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${openaiApiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',
+                        messages: [
+                            {role: "system", content: "You are a mystical, intuitive astrologer and psychic reader with a warm, excited personality. You blend cosmic wisdom with practical guidance."},
+                            {role: "user", content: prompt}
+                        ],
+                        max_tokens: 1200,
+                        temperature: 0.8
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    return `🌟 Cosmic reading error: ${data.error.message}`;
+                }
+                
+                return data.choices[0].message.content;
+                
+            } catch (error) {
+                return `🔮 The cosmic energies are clouded right now. Error: ${error.message}`;
+            }
+        }
+
+        function addCosmicReading(content) {
+            const chatMessages = document.getElementById('chatMessages');
+            const readingDiv = document.createElement('div');
+            readingDiv.className = 'message cosmic-reading';
+            
+            readingDiv.innerHTML = `
+                <div class="cosmic-reading-header">🔮 Cosmic Reading Complete! ✨🌟</div>
+                ${formatMessage(content)}
+            `;
+            
+            chatMessages.appendChild(readingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Save to conversation history
+            if (!conversations[currentSessionId]) conversations[currentSessionId] = [];
+            conversations[currentSessionId].push({
+                role: 'ai',
+                content: `🔮 **COSMIC READING COMPLETE!** 🔮\n\n${content}`,
+                timestamp: new Date().toISOString()
+            });
+            
+            localStorage.setItem('cosmic_conversations', JSON.stringify(conversations));
+        }
+
+        function exportConversation() {
+            const userName = document.getElementById('userName').value || 'cosmic_seeker';
+            const userConvo = conversations[currentSessionId] || [];
+            const chart = userCharts[currentSessionId];
+            const chartData = userChartData[currentSessionId];
+            
+            if (userConvo.length === 0) {
+                alert('No conversation to export! Start chatting first! 🌟✨');
+                return;
+            }
+            
+            // Create export content
+            let exportContent = `🌟 COSMIC CONVERSATION EXPORT ✨\n\n`;
+            exportContent += `User: ${userName}\n`;
+            exportContent += `Date: ${new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            })}\n`;
+            
+            if (chart) {
+                exportContent += `Birth Chart: ${chart.date} at ${chart.time} in ${chart.city}\n`;
+            }
+            
+            if (chartData) {
+                exportContent += `Chart Data: Available (${chartData.split('\n').length} planetary positions)\n`;
+            }
+            
+            exportContent += `\n═══════════════════════════════════════\n\n`;
+            
+            // Add conversation messages
+            userConvo.forEach((msg, index) => {
+                const timestamp = new Date(msg.timestamp).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const role = msg.role === 'user' ? 'USER' : 'COSMIC AI';
+                const content = msg.content.replace(/<[^>]*>/g, ''); // Remove HTML tags
+                
+                exportContent += `[${timestamp}] ${role}: ${content}\n\n`;
+                
+                // Add separator every 5 messages
+                if ((index + 1) % 5 === 0 && index < userConvo.length - 1) {
+                    exportContent += `═══════════════════════════════════════\n\n`;
+                }
+            });
+            
+            exportContent += `\n═══════════════════════════════════════\n`;
+            exportContent += `🌟 End of Cosmic Conversation ✨\n`;
+            exportContent += `Thank you for exploring the cosmic energies! 🔮💫`;
+            
+            // Create and download file
+            const blob = new Blob([exportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `cosmic_reading_${userName}_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // Show success message
+            addMessage('ai', `📥 **CONVERSATION EXPORTED!** 📥<br><br>Your cosmic conversation has been saved as a beautiful text file! The file includes all your messages, birth chart info, and cosmic insights.<br><br>Check your downloads folder for the file! 🌟✨💫`);
+        }
+    </script>
+</body>
+</html> 
