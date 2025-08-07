@@ -1104,7 +1104,6 @@
         let conversations = JSON.parse(localStorage.getItem('cosmic_conversations')) || {};
         let userCharts = JSON.parse(localStorage.getItem('cosmic_charts')) || {};
         let userChartData = JSON.parse(localStorage.getItem('cosmic_chart_data')) || {};
-        let openaiApiKey = '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'; // Hardcoded API key
         
         // Session management for privacy
         // Admin mode variables
@@ -1610,30 +1609,33 @@ Current Date: ${currentDate} - Use this for timing-based readings, daily energy 
             messages.push({role: "user", content: message});
 
             try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${openaiApiKey}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4',
                         messages: messages,
-                        max_tokens: 800,
-                        temperature: 0.8
+                        maxTokens: 800,
+                        temperature: 0.8,
+                        model: 'gpt-4'
                     })
                 });
 
                 const data = await response.json();
                 
+                // Debug: Log the response to see what's happening
+                console.log('🔮 API Response:', data);
+                
                 if (data.error) {
-                    return `🌟 Cosmic connection error: ${data.error.message}`;
+                    return `🌟 ${data.error}`;
                 }
                 
-                return data.choices[0].message.content;
+                return data.content;
                 
             } catch (error) {
-                return `🔮 The cosmic energies are clouded right now. Error: ${error.message}`;
+                console.log('🔮 API Call Error:', error);
+                return `🔮 The cosmic energies are clouded right now. Please try again later.`;
             }
         }
 
@@ -1831,33 +1833,36 @@ Current Date: ${currentDate} - Use this for timing-based readings, daily energy 
             }
 
             try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${openaiApiKey}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4',
                         messages: [
                             {role: "system", content: "You are a mystical, intuitive astrologer and psychic reader with a warm, excited personality. You blend cosmic wisdom with practical guidance."},
                             {role: "user", content: prompt}
                         ],
-                        max_tokens: 1200,
-                        temperature: 0.8
+                        maxTokens: 1200,
+                        temperature: 0.8,
+                        model: 'gpt-4'
                     })
                 });
 
                 const data = await response.json();
                 
+                // Debug: Log the response to see what's happening
+                console.log('🔮 Birth Chart API Response:', data);
+                
                 if (data.error) {
-                    return `🌟 Cosmic reading error: ${data.error.message}`;
+                    return `🌟 ${data.error}`;
                 }
                 
-                return data.choices[0].message.content;
+                return data.content;
                 
             } catch (error) {
-                return `🔮 The cosmic energies are clouded right now. Error: ${error.message}`;
+                console.log('🔮 Birth Chart API Call Error:', error);
+                return `🔮 The cosmic energies are clouded right now. Please try again later.`;
             }
         }
 
