@@ -1104,12 +1104,9 @@
         let conversations = JSON.parse(localStorage.getItem('cosmic_conversations')) || {};
         let userCharts = JSON.parse(localStorage.getItem('cosmic_charts')) || {};
         let userChartData = JSON.parse(localStorage.getItem('cosmic_chart_data')) || {};
-        let openaiApiKey = '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'; // Hardcoded API key
+        let openaiApiKey = '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'; // Hardcoded API key
         
         // Session management for privacy
-        let currentSessionId = getOrCreateSessionId();
-        let currentUser = 'cosmic_seeker';
-        
         // Admin mode variables
         let isAdminMode = false;
         let adminSessionId = 'admin_permanent_session';
@@ -1117,6 +1114,9 @@
         // State management to prevent race conditions
         let isGeneratingReading = false;
         let isThinking = false;
+        
+        let currentSessionId = getOrCreateSessionId();
+        let currentUser = 'cosmic_seeker';
 
         // Admin mode functions
         function checkAdminMode() {
@@ -1310,6 +1310,17 @@
         
         // Load conversation on page load
         window.onload = function() {
+            console.log('🔮 Cosmic Chatbot loading...');
+            
+            // Debug: Check if elements exist
+            console.log('Checking elements:', {
+                userName: !!document.getElementById('userName'),
+                birthDate: !!document.getElementById('birthDate'),
+                chatInput: !!document.getElementById('chatInput'),
+                sendBtn: !!document.querySelector('.send-btn'),
+                quickActions: !!document.querySelectorAll('.quick-action-btn').length
+            });
+            
             updateCurrentDate();
             
             // Check for admin mode
@@ -1332,6 +1343,8 @@
                     }
                 }
             });
+            
+            console.log('🔮 Cosmic Chatbot loaded successfully!');
         }
 
         function addCosmicSparkles() {
@@ -1384,6 +1397,7 @@
         }
 
         function saveChart() {
+            console.log('🔮 saveChart() called');
             const userName = document.getElementById('userName').value || 'cosmic_seeker';
             const birthDate = document.getElementById('birthDate').value;
             const birthTime = document.getElementById('birthTime').value;
@@ -1653,6 +1667,7 @@ Current Date: ${currentDate} - Use this for timing-based readings, daily energy 
         }
 
         function sendMessage() {
+            console.log('🔮 sendMessage() called');
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             
@@ -1691,6 +1706,7 @@ Current Date: ${currentDate} - Use this for timing-based readings, daily energy 
         }
 
         function sendQuickAction(buttonText, prompt) {
+            console.log('🔮 sendQuickAction() called:', buttonText);
             // Add visual feedback
             const button = event.target;
             button.style.transform = 'scale(0.95)';
