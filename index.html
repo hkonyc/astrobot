@@ -13,33 +13,33 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             min-height: 100vh;
             display: flex;
         }
 
         .sidebar {
             width: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 32, 39, 0.8);
+            backdrop-filter: blur(15px);
             padding: 20px;
-            border-right: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8f4f8;
         }
 
         .main-chat {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
+            background: rgba(15, 32, 39, 0.3);
+            backdrop-filter: blur(10px);
         }
 
         .chat-header {
             padding: 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e8f4f8;
         }
 
         .chat-messages {
@@ -72,29 +72,31 @@
         }
 
         .user-message {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-            color: white;
+            background: linear-gradient(135deg, rgba(44, 83, 100, 0.8), rgba(32, 58, 67, 0.6));
+            color: #e8f4f8;
             margin-left: auto;
             text-align: right;
             border-bottom-right-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .ai-message {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
-            color: #333;
+            background: linear-gradient(135deg, rgba(44, 83, 100, 0.9), rgba(32, 58, 67, 0.8));
+            color: #e8f4f8;
             border-bottom-left-radius: 5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Cosmic Reading styling */
         .cosmic-reading {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
-            color: #333;
+            background: linear-gradient(135deg, rgba(44, 83, 100, 0.95), rgba(32, 58, 67, 0.9));
+            color: #e8f4f8;
             border: 2px solid;
-            border-image: linear-gradient(45deg, #667eea, #764ba2, #ff6b6b, #667eea) 1;
+            border-image: linear-gradient(45deg, #2c5364, #203a43, #0f2027, #2c5364) 1;
             border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(44, 83, 100, 0.4);
             position: relative;
             overflow: hidden;
         }
@@ -106,7 +108,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #ff6b6b, #667eea);
+            background: linear-gradient(90deg, #2c5364, #203a43, #0f2027, #2c5364);
             animation: cosmicFlow 3s ease-in-out infinite;
         }
 
@@ -120,28 +122,28 @@
             margin-bottom: 15px;
             font-size: 18px;
             font-weight: bold;
-            color: #667eea;
-            text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+            color: #7dd3fc;
+            text-shadow: 0 0 10px rgba(125, 211, 252, 0.4);
         }
 
         .cosmic-reading strong {
-            color: #764ba2;
+            color: #7dd3fc;
             font-weight: 700;
         }
 
         .cosmic-reading em {
-            color: #ff6b6b;
+            color: #fbbf24;
             font-style: italic;
         }
 
         /* Markdown-style formatting */
         .ai-message strong {
-            color: #667eea;
+            color: #7dd3fc;
             font-weight: 700;
         }
 
         .ai-message em {
-            color: #764ba2;
+            color: #fbbf24;
             font-style: italic;
         }
 
@@ -159,13 +161,14 @@
 
         /* Thinking indicator */
         .thinking-message {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8));
-            color: #666;
+            background: linear-gradient(135deg, rgba(44, 83, 100, 0.8), rgba(32, 58, 67, 0.7));
+            color: #cbd5e1;
             border-bottom-left-radius: 5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .thinking-dots {
@@ -177,7 +180,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #7dd3fc, #2c5364);
             animation: thinkingPulse 1.4s infinite ease-in-out;
         }
 
@@ -198,8 +201,8 @@
 
         .chat-input-area {
             padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 32, 39, 0.4);
         }
 
         /* Quick Action Buttons */
@@ -212,8 +215,8 @@
         }
 
         .quick-action-btn {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
-            color: white;
+            background: linear-gradient(135deg, rgba(44, 83, 100, 0.8), rgba(32, 58, 67, 0.8));
+            color: #e8f4f8;
             border: none;
             padding: 8px 16px;
             border-radius: 20px;
@@ -221,33 +224,398 @@
             font-size: 12px;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             min-width: 120px;
             text-align: center;
         }
 
         .quick-action-btn:hover {
             transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            background: linear-gradient(135deg, rgba(102, 126, 234, 1), rgba(118, 75, 162, 1));
+            box-shadow: 0 4px 15px rgba(125, 211, 252, 0.4);
+            background: linear-gradient(135deg, rgba(44, 83, 100, 1), rgba(32, 58, 67, 1));
         }
 
         .quick-action-btn:active {
             transform: translateY(0) scale(0.95);
         }
 
-        /* Mobile responsive */
-        @media (max-width: 768px) {
+        /* Comprehensive Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 40vh;
+                overflow-y: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 15px;
+            }
+            
+            .main-chat {
+                flex: 1;
+                min-height: 60vh;
+            }
+            
+            .chat-messages {
+                max-height: 50vh;
+                padding: 15px;
+            }
+            
+            .message {
+                max-width: 95%;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .chat-header {
+                padding: 15px;
+            }
+            
+            .chat-header h1 {
+                font-size: 24px;
+                margin-bottom: 8px;
+            }
+            
+            .chat-header p {
+                font-size: 14px;
+            }
+            
+            .chat-input-area {
+                padding: 15px;
+            }
+            
             .quick-actions {
-                gap: 8px;
+                gap: 6px;
+                margin-bottom: 12px;
             }
             
             .quick-action-btn {
-                min-width: 100px;
+                min-width: 90px;
+                padding: 8px 12px;
+                font-size: 11px;
+                border-radius: 15px;
+            }
+            
+            .chat-input {
+                padding: 12px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .send-btn {
+                right: 25px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            /* Sidebar mobile optimizations */
+            .sidebar-section {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+            
+            .sidebar-section h2 {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+            
+            .sidebar-section h3 {
+                font-size: 16px;
+                margin: 12px 0 8px 0;
+            }
+            
+            .chart-subsection {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+            
+            .chart-subsection h4 {
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+            
+            .sidebar input, .sidebar select, .sidebar textarea {
+                padding: 10px;
+                font-size: 14px;
+                margin: 4px 0;
+            }
+            
+            .save-chart-btn, .chart-link-btn {
+                padding: 10px 16px;
+                font-size: 13px;
+                margin-top: 8px;
+            }
+            
+            .clear-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                max-height: 35vh;
+                padding: 12px;
+            }
+            
+            .main-chat {
+                min-height: 65vh;
+            }
+            
+            .chat-messages {
+                max-height: 45vh;
+                padding: 12px;
+            }
+            
+            .message {
+                max-width: 98%;
+                padding: 10px 14px;
+                font-size: 13px;
+                margin-bottom: 15px;
+            }
+            
+            .chat-header {
+                padding: 12px;
+            }
+            
+            .chat-header h1 {
+                font-size: 20px;
+            }
+            
+            .chat-header p {
+                font-size: 13px;
+            }
+            
+            .chat-input-area {
+                padding: 12px;
+            }
+            
+            .quick-actions {
+                gap: 5px;
+                margin-bottom: 10px;
+            }
+            
+            .quick-action-btn {
+                min-width: 80px;
+                padding: 6px 10px;
+                font-size: 10px;
+                border-radius: 12px;
+            }
+            
+            .chat-input {
+                padding: 10px 14px;
+                font-size: 16px;
+            }
+            
+            .send-btn {
+                right: 20px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            /* Enhanced touch targets */
+            .sidebar input, .sidebar select, .sidebar textarea {
+                min-height: 44px; /* iOS touch target minimum */
+                padding: 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .save-chart-btn, .chart-link-btn {
+                min-height: 44px;
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .clear-btn {
+                min-height: 44px;
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+            
+            /* Sidebar text adjustments */
+            .sidebar-section h2 {
+                font-size: 18px;
+            }
+            
+            .sidebar-section h3 {
+                font-size: 15px;
+            }
+            
+            .chart-subsection h4 {
+                font-size: 12px;
+            }
+            
+            .chart-info {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                max-height: 30vh;
+                padding: 10px;
+            }
+            
+            .main-chat {
+                min-height: 70vh;
+            }
+            
+            .chat-messages {
+                max-height: 40vh;
+                padding: 10px;
+            }
+            
+            .message {
+                max-width: 100%;
+                padding: 8px 12px;
+                font-size: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .chat-header {
+                padding: 10px;
+            }
+            
+            .chat-header h1 {
+                font-size: 18px;
+            }
+            
+            .chat-header p {
+                font-size: 12px;
+            }
+            
+            .chat-input-area {
+                padding: 10px;
+            }
+            
+            .quick-actions {
+                gap: 4px;
+                margin-bottom: 8px;
+            }
+            
+            .quick-action-btn {
+                min-width: 70px;
+                padding: 5px 8px;
+                font-size: 9px;
+                border-radius: 10px;
+            }
+            
+            .chat-input {
+                padding: 8px 12px;
+                font-size: 16px;
+            }
+            
+            .send-btn {
+                right: 15px;
                 padding: 6px 12px;
                 font-size: 11px;
+            }
+            
+            /* Ultra-compact sidebar */
+            .sidebar-section {
+                margin-bottom: 15px;
+                padding-bottom: 12px;
+            }
+            
+            .sidebar-section h2 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            
+            .sidebar-section h3 {
+                font-size: 14px;
+                margin: 10px 0 6px 0;
+            }
+            
+            .chart-subsection {
+                padding: 8px;
+                margin-bottom: 12px;
+            }
+            
+            .chart-subsection h4 {
+                font-size: 11px;
+                margin-bottom: 8px;
+            }
+            
+            .sidebar input, .sidebar select, .sidebar textarea {
+                padding: 10px;
+                font-size: 14px;
+                margin: 3px 0;
+            }
+            
+            .save-chart-btn, .chart-link-btn {
+                padding: 10px 12px;
+                font-size: 12px;
+                margin-top: 6px;
+            }
+            
+            .clear-btn {
+                padding: 8px 10px;
+                font-size: 11px;
+                margin-top: 12px;
+            }
+            
+            .chart-info {
+                font-size: 11px;
+                padding: 6px;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .sidebar {
+                max-height: 25vh;
+            }
+            
+            .main-chat {
+                min-height: 75vh;
+            }
+            
+            .chat-messages {
+                max-height: 35vh;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .quick-action-btn, .send-btn, .save-chart-btn, .chart-link-btn, .clear-btn {
+                border-width: 0.5px;
+            }
+        }
+
+        /* Accessibility improvements for mobile */
+        @media (max-width: 768px) {
+            /* Ensure sufficient contrast and readability */
+            .message {
+                line-height: 1.4;
+            }
+            
+            .ai-message strong, .cosmic-reading strong {
+                font-weight: 600;
+            }
+            
+            .ai-message em, .cosmic-reading em {
+                font-style: italic;
+            }
+            
+            /* Improve touch targets */
+            button, input, select, textarea {
+                -webkit-tap-highlight-color: rgba(125, 211, 252, 0.3);
+            }
+            
+            /* Prevent text selection on buttons */
+            .quick-action-btn, .send-btn, .save-chart-btn, .chart-link-btn, .clear-btn {
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
             }
         }
 
@@ -256,15 +624,17 @@
             padding: 15px 20px;
             border: none;
             border-radius: 25px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(44, 83, 100, 0.9);
+            color: #e8f4f8;
             font-size: 16px;
             outline: none;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .chat-input:focus {
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 20px rgba(125, 211, 252, 0.4);
             transform: translateY(-1px);
         }
 
@@ -273,20 +643,20 @@
             right: 35px;
             top: 50%;
             transform: translateY(-50%);
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(135deg, #2c5364, #203a43);
+            color: #e8f4f8;
             border: none;
             padding: 12px 24px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .send-btn:hover {
             transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(125, 211, 252, 0.4);
         }
 
         .send-btn:active {
@@ -303,25 +673,26 @@
             margin: 5px 0;
             border: none;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(44, 83, 100, 0.6);
+            color: #e8f4f8;
             transition: all 0.3s ease;
             font-family: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar input:focus, .sidebar select:focus, .sidebar textarea:focus {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(44, 83, 100, 0.8);
             outline: none;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.3);
         }
 
         .sidebar input::placeholder, .sidebar textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(232, 244, 248, 0.6);
         }
 
         .save-chart-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
+            background: linear-gradient(135deg, #2c5364, #203a43);
+            color: #e8f4f8;
             border: none;
             padding: 12px 20px;
             border-radius: 8px;
@@ -330,17 +701,17 @@
             margin-top: 10px;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .save-chart-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(125, 211, 252, 0.4);
         }
 
         .chart-link-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(135deg, #2c5364, #203a43);
+            color: #e8f4f8;
             border: none;
             padding: 10px 16px;
             border-radius: 20px;
@@ -348,17 +719,17 @@
             font-size: 13px;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             width: 100%;
             margin-bottom: 8px;
         }
 
         .chart-link-btn:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 15px rgba(125, 211, 252, 0.4);
+            background: linear-gradient(135deg, #2c5364, #203a43);
         }
 
         .chart-link-btn:active {
@@ -366,44 +737,46 @@
         }
 
         .clear-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(44, 83, 100, 0.6);
+            color: #e8f4f8;
             border: none;
             padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .clear-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(44, 83, 100, 0.8);
             transform: translateY(-1px);
         }
 
         h2 {
             margin-bottom: 15px;
-            color: #fff;
+            color: #e8f4f8;
         }
 
         h3 {
             margin: 15px 0 10px 0;
-            color: #fff;
+            color: #e8f4f8;
         }
 
         .chart-info {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(44, 83, 100, 0.4);
             padding: 10px;
             border-radius: 8px;
             margin-top: 10px;
             font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Sidebar sections */
         .sidebar-section {
             margin-bottom: 25px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .sidebar-section:last-child {
@@ -415,9 +788,9 @@
         .chart-subsection {
             margin-bottom: 20px;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(44, 83, 100, 0.3);
             border-radius: 8px;
-            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            border-left: 3px solid rgba(125, 211, 252, 0.3);
         }
 
         .chart-subsection:last-child {
@@ -426,18 +799,18 @@
 
         .chart-subsection h4 {
             margin: 0 0 12px 0;
-            color: #fff;
+            color: #e8f4f8;
             font-size: 14px;
             font-weight: bold;
             opacity: 0.9;
         }
 
         .chart-data-info {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(44, 83, 100, 0.4);
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 12px;
-            border-left: 2px solid #667eea;
+            border-left: 2px solid #7dd3fc;
         }
 
         /* Cosmic effects */
@@ -463,17 +836,17 @@
         }
 
         .chat-messages::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(44, 83, 100, 0.3);
             border-radius: 3px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(125, 211, 252, 0.4);
             border-radius: 3px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(125, 211, 252, 0.6);
         }
         
         /* Admin mode styling */
@@ -506,7 +879,7 @@
                 <span id="adminIndicator" style="display: none; margin-left: 8px; color: #ffd700; font-weight: bold;">🔑</span>
             </div>
             <div style="margin-top: 8px;">
-                <button class="save-chart-btn" onclick="showAdminLogin()" style="background: linear-gradient(135deg, #ffd700, #ffed4e); color: #333; font-size: 11px; padding: 4px 8px;">🔑 Admin Login</button>
+                <button class="save-chart-btn" onclick="showAdminLogin()" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #1e293b; font-size: 11px; padding: 4px 8px;">🔑 Admin Login</button>
             </div>
         </div>
         
@@ -526,19 +899,19 @@
                 <div class="chart-data-info">
                     <div style="display: flex; align-items: center; margin-bottom: 8px;">
                         <span style="font-size: 14px; margin-right: 6px;">🔗</span>
-                        <strong style="color: #fff; font-size: 13px;">Get Accurate Chart Data:</strong>
+                        <strong style="color: #e8f4f8; font-size: 13px;">Get Accurate Chart Data:</strong>
                     </div>
                     <button class="chart-link-btn" onclick="window.open('https://horoscopes.astro-seek.com/', '_blank')">
                         🌟 Generate at Astro-Seek
                     </button>
                     <div style="margin-top: 8px; font-size: 11px; line-height: 1.3; opacity: 0.9;">
-                        <strong style="color: #667eea;">✨ For precise readings:</strong><br>
+                        <strong style="color: #7dd3fc;">✨ For precise readings:</strong><br>
                         • Look for "AI-ChatGPT - Astrology Data Export"<br>
                         • Copy and paste below for accurate readings 🎯
                     </div>
                 </div>
                 <textarea id="chartData" placeholder="Paste your exact astrological chart data here...&#10;&#10;Example:&#10;Sun in Aries 23°03', in 7th House&#10;Moon in Cancer 2°58', in 9th House&#10;Mercury in Taurus 9°25', in 8th House&#10;ASC in Libra 2°45'&#10;MC in Cancer 3°13'" rows="6"></textarea>
-                <button class="save-chart-btn" onclick="saveChartData()" style="background: linear-gradient(135deg, #667eea, #764ba2);">🔮 Save Chart Data ✨</button>
+                <button class="save-chart-btn" onclick="saveChartData()" style="background: linear-gradient(135deg, #2c5364, #203a43);">🔮 Save Chart Data ✨</button>
             </div>
             
             <div id="chartInfo" class="chart-info" style="display: none;">
@@ -554,15 +927,15 @@
         
         <div class="sidebar-section">
             <h3>✨ Actions</h3>
-            <button class="save-chart-btn" onclick="exportConversation()" style="background: linear-gradient(135deg, #4CAF50, #45a049);">📥 Export Chat ✨</button>
-            <button class="save-chart-btn" onclick="generateFullReading()" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-top: 8px;">✨ Generate Full Reading 🌟</button>
+            <button class="save-chart-btn" onclick="exportConversation()" style="background: linear-gradient(135deg, #059669, #047857);">📥 Export Chat ✨</button>
+            <button class="save-chart-btn" onclick="generateFullReading()" style="background: linear-gradient(135deg, #2c5364, #203a43); margin-top: 8px;">✨ Generate Full Reading 🌟</button>
             <button class="clear-btn" onclick="clearChat()" style="margin-top: 8px;">🗑️ Clear Chat ✨</button>
         </div>
         
         <div class="sidebar-section">
             <h3>🔗 Session Management</h3>
-            <button class="save-chart-btn" onclick="createNewSession()" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);">🆕 New Session ✨</button>
-            <button class="save-chart-btn" onclick="shareSessionLink()" style="background: linear-gradient(135deg, #667eea, #764ba2); margin-top: 8px;">🔗 Share Session Link ✨</button>
+            <button class="save-chart-btn" onclick="createNewSession()" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">🆕 New Session ✨</button>
+            <button class="save-chart-btn" onclick="shareSessionLink()" style="background: linear-gradient(135deg, #2c5364, #203a43); margin-top: 8px;">🔗 Share Session Link ✨</button>
             <div id="sessionInfo" style="margin-top: 12px; font-size: 11px; opacity: 0.8; line-height: 1.3;">
                 <div id="visitorInfo" style="display: none;">
                     💡 <strong>Visitor Mode:</strong> Your data is temporary and will be cleared when you close the browser.
